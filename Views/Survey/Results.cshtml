@@ -1,0 +1,34 @@
+﻿@model ProgramowanieZaawansowane.Survey.Models.Survey
+
+<canvas id="resultsChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    var ctx = document.getElementById('resultsChart');
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                @Html.Raw(string.Join(",", Model.Options.Select(o => $"'{o.Text}'")))
+            ],
+            datasets: [{
+                label: 'Wyniki',
+                data: [
+                    @string.Join(",", Model.Options.Select(o => o.Votes.Count()))
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.6)'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }
+        }
+    });
+</script>

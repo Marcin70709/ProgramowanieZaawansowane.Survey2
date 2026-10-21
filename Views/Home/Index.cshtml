@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Strona główna";
+}
+
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="display-4 fw-bold">System Ankiet</h1>
+        <hr class="w-25 mx-auto mb-4" />
+
+        @if (!User.Identity!.IsAuthenticated)
+        {
+            <p class="lead">
+                Zarejestruj się lub zaloguj, aby brać udział w ankietach.
+            </p>
+
+            <a asp-area="Identity" asp-page="/Account/Login"
+               class="btn btn-primary btn-lg me-2">
+                Zaloguj się
+            </a>
+
+            <a asp-area="Identity" asp-page="/Account/Register"
+               class="btn btn-outline-primary btn-lg">
+                Zarejestruj się
+            </a>
+        }
+
+        else if (User.IsInRole("Respondent"))
+        {
+            <p class="lead">
+                Możesz przeglądać dostępne ankiety, oddać głos
+                oraz zobaczyć wyniki w formie wykresu.
+            </p>
+
+            <a asp-controller="Survey" asp-action="Index"
+               class="btn btn-success btn-lg">
+                Zobacz ankiety
+            </a>
+        }
+
+        else if (User.IsInRole("Ankieter"))
+        {
+            <p class="lead">
+                Możesz tworzyć nowe ankiety, zarządzać opcjami
+                oraz analizować wyniki głosowania.
+            </p>
+
+            <a asp-controller="Survey" asp-action="Index"
+               class="btn btn-success btn-lg me-2">
+                Moje ankiety
+            </a>
+
+            <a asp-controller="Survey" asp-action="Create"
+               class="btn btn-primary btn-lg">
+                Utwórz nową ankietę
+            </a>
+        }
+    </div>
+</div>

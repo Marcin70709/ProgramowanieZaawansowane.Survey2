@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@model IEnumerable<IdentityUser>
+
+@{
+    ViewData["Title"] = "Panel Admina";
+}
+
+<h2>Panel Admina</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Obecna rola</th>
+         <th>Zarządzanie</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            var isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+            var isAnkieter = await UserManager.IsInRoleAsync(user, "Ankieter");
+            var isRespondent = await UserManager.IsInRoleAsync(user, "Respondent");
+
+            var roleName = isAdmin ? "Admin"
+                : isAnkieter ? "Ankieter"
+                : isRespondent ? "Respondent"
+                : "Brak roli";
+
+            <tr>
+                <td>@user.Email</td>
+                <td>@roleName</td>
+                <td>
+                    @if (!isAdmin)
+                    {
+                        <form asp-controller="Admin"
+                              asp-action="ChangeRole"
+                              method="post"
+                              class="d-flex gap-2">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="userId"
+                                   value="@user.Id" />
+
+                            <select name="role" class="form-select">
+                                <option value="Respondent"
+                                        selected="@(isRespondent)">
+                                    Respondent
+                                </option>
+                                <option value="Ankieter"
+                                        selected="@(isAnkieter)">
+                                    Ankieter
+                                </option>
+                            </select>
+
+                            <button type="submit" class="btn btn-primary">
+                                Zapisz
+                            </button>
+                        </form>
+
+<form asp-controller="Admin"
+      asp-action="DeleteUser"
+      method="post"
+      onsubmit="return confirm('Czy na pewno chcesz usunąć to konto?');"
+      class="mt-2">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="userId" value="@user.Id" />
+
+    <button type="submit" class="btn btn-sm btn-danger">
+        Usuń konto
+    </button>
+</form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Administrator</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

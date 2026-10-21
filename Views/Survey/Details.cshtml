@@ -1,0 +1,37 @@
+﻿@model ProgramowanieZaawansowane.Survey.Models.Survey
+
+<h2>@Model.Title</h2>
+<p>@Model.Description</p>
+
+@if (User.IsInRole("Respondent"))
+{
+    if (!(bool)ViewBag.AlreadyVoted)
+    {
+        <form asp-action="Vote" method="post">
+            <input type="hidden" name="surveyId" value="@Model.Id" />
+
+            @foreach (var option in Model.Options)
+            {
+                <div>
+                    <input type="radio" name="optionId" value="@option.Id" required />
+                    @option.Text
+                </div>
+            }
+
+            <button type="submit" class="btn btn-primary mt-2">
+                Głosuj
+            </button>
+        </form>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Już zagłosowałeś w tej ankiecie.
+        </div>
+
+        <a asp-action="Results" asp-route-id="@Model.Id"
+           class="btn btn-success">
+            Zobacz wyniki
+        </a>
+    }
+}

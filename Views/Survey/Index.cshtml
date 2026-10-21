@@ -1,0 +1,74 @@
+﻿@model IEnumerable<ProgramowanieZaawansowane.Survey.Models.Survey>
+
+@{
+    ViewData["Title"] = "Ankiety";
+}
+
+<h2 class="mb-4">Lista ankiet</h2>
+
+@if (User.IsInRole("Ankieter"))
+{
+    <a asp-action="Create" class="btn btn-success mb-3">
+        Utwórz nową ankietę
+    </a>
+}
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Tytuł</th>
+            <th>Opis</th>
+            <th>Data utworzenia</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var survey in Model)
+        {
+            <tr>
+                <td>@survey.Title</td>
+                <td>@survey.Description</td>
+                <td>@survey.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>
+
+                    <!-- Szczegóły (dla wszystkich zalogowanych) -->
+                    <a asp-action="Details"
+                       asp-route-id="@survey.Id"
+                       class="btn btn-primary btn-sm">
+                        Szczegóły
+                    </a>
+
+                    <!-- Respondent widzi tylko wykres -->
+                    @if (User.IsInRole("Respondent"))
+                    {
+                        <a asp-action="Results"
+                           asp-route-id="@survey.Id"
+                           class="btn btn-info btn-sm">
+                            Wyniki
+                        </a>
+                    }
+
+                    <!-- Ankieter widzi pełną listę głosów -->
+                    @if (User.IsInRole("Ankieter"))
+                    {
+                        <a asp-action="Votes"
+                           asp-route-id="@survey.Id"
+                           class="btn btn-warning btn-sm">
+                            Lista głosów
+                        </a>
+                    }
+
+                </td>
+                <td>
+                   
+
+                    @if (User.IsInRole("Ankieter"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@survey.Id"
+                           class="btn btn-danger btn-sm">Usuń</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

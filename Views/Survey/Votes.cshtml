@@ -1,0 +1,29 @@
+﻿@model ProgramowanieZaawansowane.Survey.Models.Survey
+
+<h2>Lista głosów — @Model.Title</h2>
+
+@foreach (var option in Model.Options)
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>@option.Text</strong>
+        </div>
+        <div class="card-body">
+
+            @if (option.Votes.Any())
+            {
+                <ul>
+                    @foreach (var vote in option.Votes)
+                    {
+                        <li>@vote.User.Email</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Brak głosów</p>
+            }
+
+        </div>
+    </div>
+}

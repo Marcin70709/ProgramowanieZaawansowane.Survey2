@@ -1,0 +1,28 @@
+﻿@model ProgramowanieZaawansowane.Survey.Models.Survey
+
+<h2>Nowa Ankieta</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <button type="submit" class="btn btn-primary mt-2">Utwórz</button>
+    <hr />
+
+    <h4>Opcje odpowiedzi</h4>
+
+    <input type="text" name="options" class="form-control mb-2" placeholder="Opcja 1" />
+    <input type="text" name="options" class="form-control mb-2" placeholder="Opcja 2" />
+    <input type="text" name="options" class="form-control mb-2" placeholder="Opcja 3" />
+    <input type="text" name="options" class="form-control mb-2" placeholder="Opcja 4" />
+
+    <button type="submit" class="btn btn-primary mt-2">Utwórz ankietę</button>
+</form>
